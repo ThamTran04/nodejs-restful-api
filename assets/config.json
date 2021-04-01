@@ -1,0 +1,17 @@
+{
+  "rootAPI": "/api/v1/",
+  "port": 8000,
+  "db": {
+    "host": "localhost",
+    "database": "biblio",
+    "user": "root",
+    "password": ""
+  },
+  "errors" : {
+    "wrongID": "Mauvais ID",
+    "wrongMaxValue": "Mauvaise Valeur",
+    "nameAlreadyTaken": "Nom déjà utilisé",
+    "noNameValue": "Pas de valeur",
+    "sameName": "Même Nom"
+  }
+}
