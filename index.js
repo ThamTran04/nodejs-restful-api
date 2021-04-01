@@ -6,7 +6,7 @@ const ligneLivre = livre => `
 		<td>${livre.genre}</td>
 		<td>${livre.prix}</td>
         <td>${livre.prix}</td>
-        <td><button data-type="delete" data-id="${livre.id}">Supprimer</button></td>
+        <td><button data-type="delete" data-id="${livre.numlivre}">Supprimer</button></td>
 	</tr>`
 
 // const getAll = async () => {
@@ -21,10 +21,28 @@ async function getAll() {
     return res.resultat; // le mot 'resultat' venant du fichier ../assets/functions
 }
 
+async function delLivre(id) {
+    const response = await fetch('http://localhost:8000/api/v1/livres/${id}', {
+        method: 'DELETE'
+    });
+    return response.resultat;
+}
+
+async function deleteLivre(id) {
+    delLivre(id).then(() => afficheLivres());
+}
+
 async function afficheLivres() {
     const el = document.getElementById('listLivres');
     const livres = await getAll();
     livres.forEach(livre => el.innerHTML += ligneLivre(livre));
+    document.querySelectorAll('[data-type="delete"]').forEach(element => {
+        element.addEventListener('click', e => {
+            e.preventDefault();
+            deleteLivre(parseInt(e.target.dataset.id));
+            console.log(e.target.dataset.id);
+        })
+    })
 }
 
 afficheLivres()

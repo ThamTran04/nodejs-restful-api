@@ -38,6 +38,22 @@ db.connect((err) => {
                     });
             })
 
+        LivresRouter.route('/:id')
+        // http://localhost:8000/api/v1/livres/1
+            .delete((req, res) => {
+                db.query('SELECT * FROM livre WHERE numlivre=?', parseInt(req.params.id), (err, result) => {
+                    if (err) res.json(error(err))
+                    else {
+                        if (result[0] != undefined) 
+                            db.query('DELETE FROM livre WHERE numlivre=?', parseInt(req.params.id), (err, result) => {
+                                if (err) res.json(error(err.message))
+                                else res.json(success(true))
+                            });
+                        else res.json(error('mauvais ID'));
+                    }
+                })
+            })
+
         app.use(config.rootAPI + 'livres', LivresRouter)
         app.listen(config.port, () => console.log('Started on port ' + config.port))
     }
