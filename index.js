@@ -1,12 +1,12 @@
 //Livre = Objet Livre
 const ligneLivre = livre => `
 	<tr>
-		<td>${livre.titre}</td>
+		<td>${livre.id}</td>
+        <td>${livre.titre}</td>
 		<td>${livre.auteur}</td>
 		<td>${livre.genre}</td>
 		<td>${livre.prix}</td>
-        <td>${livre.prix}</td>
-        <td><button data-type="delete" data-id="${livre.numlivre}">Supprimer</button></td>
+        <td><button class="delete" id="${livre.id}">Supprimer</button></td>
 	</tr>`
 
 // const getAll = async () => {
@@ -22,25 +22,25 @@ async function getAll() {
 }
 
 async function delLivre(id) {
-    const response = await fetch('http://localhost:8000/api/v1/livres/${id}', {
-        method: 'DELETE'
-    });
-    return response.resultat;
+    // const response = await fetch('http://localhost:8000/api/v1/livres/'+id, {
+    //     method: 'DELETE'
+    // });
+    console.log('test ${id}');
 }
 
 async function deleteLivre(id) {
-    delLivre(id).then(() => afficheLivres());
+    await delLivre(id);
+    afficheLivres();
 }
 
 async function afficheLivres() {
     const el = document.getElementById('listLivres');
     const livres = await getAll();
     livres.forEach(livre => el.innerHTML += ligneLivre(livre));
-    document.querySelectorAll('[data-type="delete"]').forEach(element => {
-        element.addEventListener('click', e => {
-            e.preventDefault();
-            deleteLivre(parseInt(e.target.dataset.id));
-            console.log(e.target.dataset.id);
+    document.querySelectorAll(".delete").forEach(element => {
+        element.addEventListener('click', (e) => {
+            deleteLivre(e.target.id * 1);
+            console.log(e.target.id)
         })
     })
 }

@@ -14,7 +14,7 @@ db.connect((err) => {
     if (err) console.log(err.message);
     else {
         const app = express();
-        let LivresRouter = express.Router();
+        const LivresRouter = express.Router();
         app.use(morgan('dev'));
         app.use(bodyParser.json());
         app.use(bodyParser.urlencoded({
@@ -26,7 +26,7 @@ db.connect((err) => {
             // http://localhost:8000/api/v1/livres
             .get((req, res) => {
                 if (req.query.max !== undefined && req.query.max > 0)
-                    db.query('SELECT * FROM livre LIMIT 0, ?;', parseInt(req.query.max), (err, result) => {
+                    db.query('SELECT * FROM livre LIMIT 0, ?', req.query.max * 1, (err, result) => {
                         if (err) res.json(error(err.message))
                         else res.json(success(result))
                     });
@@ -39,17 +39,17 @@ db.connect((err) => {
             })
 
         LivresRouter.route('/:id')
-        // http://localhost:8000/api/v1/livres/1
+            // http://localhost:8000/api/v1/livres/1
             .delete((req, res) => {
-                db.query('SELECT * FROM livre WHERE numlivre=?', parseInt(req.params.id), (err, result) => {
+                db.query('SELECT * FROM livre WHERE id=?', parseInt(req.params.id), (err, result) => {
                     if (err) res.json(error(err))
                     else {
-                        if (result[0] != undefined) 
-                            db.query('DELETE FROM livre WHERE numlivre=?', parseInt(req.params.id), (err, result) => {
+                        if (result[0] != undefined)
+                            db.query('DELETE FROM livre WHERE id=?', parseInt(req.params.id), (err, result) => {
                                 if (err) res.json(error(err.message))
-                                else res.json(success(true))
+                                else res.json(success(result))
                             });
-                        else res.json(error('mauvais ID'));
+                        else res.json(error(config.errors.wrongID));
                     }
                 })
             })
