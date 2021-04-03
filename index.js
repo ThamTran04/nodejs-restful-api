@@ -16,31 +16,26 @@ const ligneLivre = livre => `
 // }
 
 async function getAll() {
-    const response = await fetch('http://localhost:8000/api/v1/livres?max=5');
+    const response = await fetch('http://localhost:8000/api/v1/livres?max=10');
     const res = await response.json();
     return res.resultat; // le mot 'resultat' venant du fichier ../assets/functions
 }
 
-async function delLivre(id) {
-    // const response = await fetch('http://localhost:8000/api/v1/livres/'+id, {
-    //     method: 'DELETE'
-    // });
-    console.log('test ${id}');
-}
-
 async function deleteLivre(id) {
-    await delLivre(id);
+    await fetch(`http://localhost:8000/api/v1/livres/${id}`, {
+        method: 'DELETE'
+    });
     afficheLivres();
 }
 
 async function afficheLivres() {
     const el = document.getElementById('listLivres');
+    el.innerHTML = "";
     const livres = await getAll();
     livres.forEach(livre => el.innerHTML += ligneLivre(livre));
     document.querySelectorAll(".delete").forEach(element => {
         element.addEventListener('click', (e) => {
             deleteLivre(e.target.id * 1);
-            console.log(e.target.id)
         })
     })
 }
