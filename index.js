@@ -6,7 +6,7 @@ const ligneLivre = livre => `
 		<td>${livre.auteur}</td>
 		<td>${livre.genre}</td>
 		<td>${livre.prix}</td>
-        <td><button class="delete" id="${livre.id}">Supprimer</button></td>
+        <td><button class = "delete" id="${livre.id}">Supprimer</button></td>
 	</tr>`
 
 // const getAll = async () => {
@@ -33,11 +33,11 @@ async function afficheLivres() {
     el.innerHTML = "";
     const livres = await getAll();
     livres.forEach(livre => el.innerHTML += ligneLivre(livre));
-    document.querySelectorAll(".delete").forEach(element => {
-        element.addEventListener('click', (e) => {
-            deleteLivre(e.target.id * 1);
-        })
-    })
+    document.querySelector("#listLivres").addEventListener('click', delegateClick)
+}
+
+function delegateClick(e) {
+    if (e.target.classList.contains("delete")) deleteLivre(e.target.id * 1);
 }
 
 afficheLivres()
